@@ -6,41 +6,73 @@ typedef struct element{
   char label;
 }element;
 
-void printPriority(element **heap, int size){
+void sort(element **heap, int size, element **sorted, int iteration){
   if(size == 0){
-    printf("\n");
     return;
   }
   int i = 0;
   while(heap[i]->priority != size){
     i++;
   }
-  printf("%c/%d ", heap[i]->label, heap[i]->priority);
-  printPriority(heap, size-1);
+  sorted[iteration] = heap[i];
+
+  sort(heap, size-1, sorted, iteration + 1);
   return;
 }
 
+void outputPrint(int node, element **sorted, int size);
 
 int main(void) {
   int strings;
   scanf("%d", &strings);
   while(strings != 0){
     element **heap;
-    heap = malloc(sizeof(element) * strings + 1);
+    heap = malloc(sizeof(element) * strings);
       
     for(int j = 0; j < strings; j++){
       element *el;
       el = malloc(sizeof(element));
-      if(j!= strings -1){
-        scanf(" %c/%d", &el->label, &el->priority);
-      }else{
-        scanf(" %c/%d", &el->label, &el->priority);
-      }
+      scanf(" %c/%d", &el->label, &el->priority);
       heap[j] = el;
     }
-    printPriority(heap, strings);
+    int i = 0;
+    while(i != strings){
+      printf("(");
+      int j = 0;
+      for(int i = j+1; i < strings; i++){
+        if(heap[j]->priority < heap[i]->priority){
+          printf("(");
+        }
+        j++;
+      }
+      printf("%c/%d", heap[0]->label, heap[0]->priority);
+      if(heap[0]->priority < heap[1]->priority){
+        printf(")");
+      }
+    }
+
+    printf("\n");
     scanf("%d", &strings);
+    free(heap);
   }
   printf("\n");
   return 0;
+}
+
+void outputPrint(int node, element **heap, int size) {
+	if(node == size)	return;
+	printf("(");
+  int j = node;
+  for(int i = j+1; i < size; i++){
+    if(heap[j]->priority < heap[i]->priority){
+      printf("(");
+    }
+    j++;
+  }
+  printf("%c/%d", heap[node]->label, heap[node]->priority);
+	outputPrint(node+1, heap, size);
+  if(heap[node]->priority < heap[node+1]->priority){
+    printf(")");
+  }
+  return;
 }
