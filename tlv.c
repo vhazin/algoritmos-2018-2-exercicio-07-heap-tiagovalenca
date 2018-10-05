@@ -35,22 +35,32 @@ int main(void) {
       scanf(" %c/%d", &el->label, &el->priority);
       heap[j] = el;
     }
-    int i = 0;
-    while(i != strings){
-      printf("(");
-      int j = 0;
-      for(int i = j+1; i < strings; i++){
-        if(heap[j]->priority < heap[i]->priority){
-          printf("(");
+    int k = 0;
+    int u = 0;
+    int contador = 1;
+    printf("(");
+    while(k != strings){
+      int j = k;
+      if(contador < strings){
+          for(int i = j+1; i < strings; i++){
+            if(heap[j]->priority < heap[i]->priority){
+              printf("(");
+              contador++;
+            }
+            j++;
+          }
+      }
+      printf("%c/%d", heap[k]->label, heap[k]->priority);
+      if(k!=strings-1){
+        u = heap[k+1]->priority;
+      
+        if(heap[k]->priority < u){
+          printf(")");
         }
-        j++;
       }
-      printf("%c/%d", heap[0]->label, heap[0]->priority);
-      if(heap[0]->priority < heap[1]->priority){
-        printf(")");
-      }
+      k++;
     }
-
+    printf(")");
     printf("\n");
     scanf("%d", &strings);
     free(heap);
